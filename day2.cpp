@@ -65,7 +65,36 @@ using namespace std;
     }
   };
 
-  
+  //optimization (space O(n)->O(1))
+  class Solution {
+    public:
+    int helper(int IDX,string s){
+        int a=1,b=0;
+        for(int idx=s.size();idx>=IDX;idx--){
+        char ch=s[idx];
+        int sum=0;
+        if(ch!='0'){
+          sum+=a;
+        if(idx<s.size()-1){
+            char ch2=s[idx+1];
+            int val=(ch-'0')*10+(ch2-'0');
+            if(val<=26){
+                sum+=b;
+            }
+        }   
+        }
+            b=a;
+            a=sum;
+        }
+        return a;
+    }
+    int numDecodings(string s) {
+        int n=s.length();
+        return helper(0,s);
+    }
+  };
+
+
 
 
 
