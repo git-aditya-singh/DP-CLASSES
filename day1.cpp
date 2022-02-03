@@ -1,6 +1,50 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//leetcode 509 fibonacci number
+  
+  //recursive approach
+  class Solution {
+    public:
+    int fib(int n) {
+        if(n<=1)return n;
+       return fib(n-1)+fib(n-2);
+    }
+  };
+
+  //memoization
+  class Solution {
+    public:
+    int fib(int n,vector<int>&dp) {
+        if(n<=1)return n;
+        if(dp[n]!=0){
+            return dp[n];
+        }
+        dp[n]= fib(n-1,dp)+fib(n-2,dp);
+        return dp[n];
+        
+    }
+    int fib(int n) {
+        vector<int>dp(n+1,0);
+        return fib(n,dp);
+    }
+  };
+
+  //tabulation
+  class Solution {
+    public:
+    int fib(int N) {
+        vector<int>dp(N+1,0);
+        for(int n=0;n<=N;n++){
+        if(n<=1){dp[n]=n;continue;}
+        
+        dp[n]= dp[n-1]+dp[n-2];
+        }
+        return dp[N];
+    }
+  };
+
+
 //leetcode 62 unique path
 
   //memoization
