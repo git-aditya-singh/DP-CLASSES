@@ -51,7 +51,25 @@ using namespace std;
     }
   };
  
-//
+  //space optimization(O(n)->O(1))
+  class Solution
+  {
+    public:
+    int mod=(int)1e9+7;
+    long long countFriendsPairings_(int N) 
+    {   if(N<=2)return N;
+        long long a=2,b=1;
+        for(int n=3;n<=N;n++){
+          long long c=(a+(b*(n-1))%mod)%mod;
+          b=a;
+          a=c;
+       }
+       return a;
+    }
+    int countFriendsPairings(int n){
+         return (int)countFriendsPairings_(n);
+    }
+  };
 
 
 //main function===================================================

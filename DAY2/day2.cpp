@@ -317,6 +317,109 @@ using namespace std;
     }
   };
 
+//maximum path sum in matrix
+
+  //recursive approach
+  class Solution{
+    public:
+    int maximumPath(int N, vector<vector<int>> Matrix)
+    {
+        int n=Matrix.size();
+        int m=Matrix[0].size();
+        int ans=INT_MIN;
+        vector<vector<int>>dirs={{1,0},{1,1},{1,-1}};
+        for(int i=0;i<m;i++){
+            ans=max(ans,helper(0,i,Matrix,dirs));
+        }
+        return ans;
+    }
+    int helper(int r,int c,vector<vector<int>>& Matrix,vector<vector<int>>& dirs){
+        if(r==Matrix.size()-1){
+            return Matrix[r][c];
+        }
+        int ans=INT_MIN;
+        for(auto dir:dirs){
+            int nr=r+dir[0];
+            int nc=c+dir[1];
+            if(nr<Matrix.size()&&nc>=0&&nc<Matrix[0].size()){
+                ans=max(ans,helper(nr,nc,Matrix,dirs));
+            }
+        }
+        return ans+Matrix[r][c];
+    }
+  };
+
+  //memoization
+  class Solution{
+    public:
+    int maximumPath(int N, vector<vector<int>> Matrix)
+    {
+        int n=Matrix.size();
+        int m=Matrix[0].size();
+        int ans=INT_MIN;
+        vector<vector<int>>dp(n,vector<int>(m,-1));
+        vector<vector<int>>dirs={{1,0},{1,1},{1,-1}};
+        for(int i=0;i<m;i++){
+            ans=max(ans,helper(0,i,Matrix,dirs,dp));
+        }
+        return ans;
+    }
+    int helper(int r,int c,vector<vector<int>>& Matrix,vector<vector<int>>& dirs,vector<vector<int>>& dp){
+        if(r==Matrix.size()-1){
+            return Matrix[r][c];
+        }
+        if(dp[r][c]!=-1)return dp[r][c];
+        int ans=INT_MIN;
+        for(auto dir:dirs){
+            int nr=r+dir[0];
+            int nc=c+dir[1];
+            if(nr<Matrix.size()&&nc>=0&&nc<Matrix[0].size()){
+                ans=max(ans,helper(nr,nc,Matrix,dirs,dp));
+            }
+        }
+        return dp[r][c]=ans+Matrix[r][c];
+    }
+  };
+
+  //tabulation
+  class Solution{
+    public:
+    int maximumPath(int N, vector<vector<int>> Matrix)
+    {
+        int n=Matrix.size();
+        int m=Matrix[0].size();
+        
+        vector<vector<int>>dp(n,vector<int>(m,-1));
+        vector<vector<int>>dirs={{1,0},{1,1},{1,-1}};
+        return helper(Matrix,dirs,dp);
+        
+    }
+    int helper(vector<vector<int>>& Matrix,vector<vector<int>>& dirs,vector<vector<int>>& dp){
+        for(int r=Matrix.size()-1;r>=0;r--){
+          for(int c=Matrix[0].size()-1;c>=0;c--){    
+            if(r==Matrix.size()-1){
+                dp[r][c]= Matrix[r][c];continue;
+            }
+            int ans=INT_MIN;
+            for(auto dir:dirs){
+               int nr=r+dir[0];
+               int nc=c+dir[1];
+               if(nr<Matrix.size()&&nc>=0&&nc<Matrix[0].size()){
+                ans=max(ans,dp[nr][nc]);
+               }
+            }
+         dp[r][c]=ans+Matrix[r][c];
+       }
+      }
+      int ans=INT_MIN;
+      for(int i=0;i<Matrix[0].size();i++){
+            ans=max(ans,dp[0][i]);
+        }
+        return ans;
+    }
+  };
+
+  
 
 
 //main=====================================================================
