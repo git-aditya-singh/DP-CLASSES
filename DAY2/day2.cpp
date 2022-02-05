@@ -419,7 +419,85 @@ using namespace std;
     }
   };
 
-  
+//leetcode 64 minimum path sum
+
+  //recursive approach
+  class Solution {
+    public:
+    int minPathSum(vector<vector<int>>& grid) {
+        vector<vector<int>>dirs={{0,1},{1,0}};
+        return helper(0,0,grid,dirs);     
+    }
+    int helper(int r,int c,vector<vector<int>>& grid,vector<vector<int>>& dirs){
+        if(r==grid.size()-1 && c==grid[0].size()-1){
+            return grid[r][c];
+        }
+        int ans=INT_MAX;
+        for(auto& dir:dirs){
+            int nr=r+dir[0];
+            int nc=c+dir[1];
+            if(nr<grid.size()&&nc<grid[0].size()){
+                ans=min(ans,helper(nr,nc,grid,dirs));
+            }
+        }
+        return grid[r][c]+ans;
+    }
+  };   
+
+  //memoization
+  class Solution {
+    public:
+    int minPathSum(vector<vector<int>>& grid) {
+        vector<vector<int>>dirs={{0,1},{1,0}};
+        vector<vector<int>>dp(grid.size(),vector<int>(grid[0].size(),-1));
+        return helper(0,0,grid,dirs,dp);     
+    }
+    int helper(int r,int c,vector<vector<int>>& grid,vector<vector<int>>& dirs,vector<vector<int>>& dp){
+        if(r==grid.size()-1 && c==grid[0].size()-1){
+            return grid[r][c];
+        }
+        if(dp[r][c]!=-1)return dp[r][c];
+        int ans=INT_MAX;
+        for(auto& dir:dirs){
+            int nr=r+dir[0];
+            int nc=c+dir[1];
+            if(nr<grid.size()&&nc<grid[0].size()){
+                ans=min(ans,helper(nr,nc,grid,dirs,dp));
+            }
+        }
+        return dp[r][c]=grid[r][c]+ans;
+    }
+  };
+
+  //tabulation
+  class Solution {
+    public:
+    int minPathSum(vector<vector<int>>& grid) {
+        vector<vector<int>>dirs={{0,1},{1,0}};
+        vector<vector<int>>dp(grid.size(),vector<int>(grid[0].size(),-1));
+        return helper(0,0,grid,dirs,dp);     
+    }
+    int helper(int R,int C,vector<vector<int>>& grid,vector<vector<int>>& dirs,vector<vector<int>>& dp){
+        for(int r=grid.size()-1;r>=R;r--)
+        for(int c=grid[0].size()-1;c>=C;c--){    
+        if(r==grid.size()-1 && c==grid[0].size()-1){
+            dp[r][c]=grid[r][c];continue;
+        }
+        
+        int ans=INT_MAX;
+        for(auto& dir:dirs){
+            int nr=r+dir[0];
+            int nc=c+dir[1];
+            if(nr<grid.size()&&nc<grid[0].size()){
+                ans=min(ans,dp[nr][nc]);
+            }
+        }
+           dp[r][c]=grid[r][c]+ans;
+        }
+        return dp[R][C];
+    }
+  };  
+
 
 
 //main=====================================================================
