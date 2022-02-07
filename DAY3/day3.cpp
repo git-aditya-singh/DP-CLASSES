@@ -71,6 +71,62 @@ using namespace std;
     }
   };
 
+//divide n numbers in k group
+
+  //recursive approach
+  class solution{
+      public:
+      int divideintoksubsets(int n,int k){
+         if(n==k || k==1){return 1;}
+
+         int sepgrp=divideintoksubsets(n-1,k-1);
+         int joingrp=divideintoksubsets(n-1,k)*k;
+         return sepgrp+joingrp;
+      }
+  };
+  //memoization
+  class solution{
+      public:
+      int divideintoksubsets(int n,int k){
+          vector<vector<int>>dp(n+1,vector<int>(k+1,-1));
+          return helper(n,k,dp);
+      }
+      int helper(int n,int k,vector<vector<int>>& dp){
+           if(n==k || k==1){
+               return dp[n][k]=1;
+           }
+           if(dp[n][k]!=-1)return dp[n][k];
+           int sepgrp=helper(n-1,k-1,dp);
+           int joingrp=helper(n-1,k,dp)*k;
+           cout<<sepgrp+joingrp<<endl;
+           return dp[n][k]=sepgrp+joingrp;
+      }
+  };
+
+  //tabulation
+  class solution{
+      public:
+      int divideintoksubsets(int n,int k){
+          vector<vector<int>>dp(n+1,vector<int>(k+1,0));
+          return helper(n,k,dp);
+      }
+      int helper(int N,int K,vector<vector<int>>& dp){
+            for(int k=1;k<=K;k++){
+              for(int n=1;n<=N;n++){
+               if(n==k || k==1){
+                   dp[n][k]=1; continue;
+                }
+               
+               int sepgrp=dp[n-1][k-1];
+               int joingrp=dp[n-1][k]*k;
+               dp[n][k]=sepgrp+joingrp;
+            }
+           }
+           return dp[N][K];
+      }
+        
+  };
+
 
 //main function===================================================
 int main(){
