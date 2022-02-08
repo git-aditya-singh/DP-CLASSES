@@ -127,6 +127,154 @@ using namespace std;
         
   };
 
+//leetcode 516 longest palindromic subsequence
+
+  //recursive approach
+  class Solution {
+    public:
+    int longestPalindromeSubseq(string s) {
+        int n=s.length();
+        return helper(s,0,n-1);
+    }
+    int helper(string& s,int li,int ri){
+        if(li==ri){
+            return 1;
+        }
+        if(li>ri){
+            return 0;
+        }
+        if(s[li]==s[ri]){
+            return 2+helper(s,li+1,ri-1);
+        }
+        return max(helper(s,li+1,ri),helper(s,li,ri-1));
+    }
+  };
+
+  //memoization
+  class Solution {
+    public:
+    int longestPalindromeSubseq(string s) {
+        int n=s.length();
+        vector<vector<int>>dp(n,vector<int>(n,-1));
+        return helper(s,0,n-1,dp);
+    }
+    int helper(string& s,int li,int ri,vector<vector<int>>& dp){
+        if(li==ri){
+            return dp[li][ri]=1;
+        }
+        if(li>ri){
+            return dp[li][ri]=0;
+        }
+        if(dp[li][ri]!=-1)return dp[li][ri];
+        if(s[li]==s[ri]){
+            return dp[li][ri]=2+helper(s,li+1,ri-1,dp);
+        }
+        return dp[li][ri]=max(helper(s,li+1,ri,dp),helper(s,li,ri-1,dp));
+    }
+  };
+
+  //tabulation
+  class Solution {
+    public:
+    int longestPalindromeSubseq(string s) {
+        int n=s.length();
+        vector<vector<int>>dp(n,vector<int>(n,0));
+        return helper(s,0,n-1,dp);
+    }
+    int helper(string& s,int LI,int RI,vector<vector<int>>& dp){
+        int n=s.length();
+        for(int gap=0;gap<n;gap++){
+        for(int li=0,ri=gap;ri<n;li++,ri++){
+            if(li==ri){
+            dp[li][ri]=1;continue;
+            }
+        
+        if(s[li]==s[ri]){
+           dp[li][ri]=2+dp[li+1][ri-1];continue;
+        }
+         dp[li][ri]=max(dp[li+1][ri],dp[li][ri-1]);
+        }
+        }
+        return dp[LI][RI];
+    }
+  };
+
+//leetcode 1143 longest common subsequence
+ 
+  //recursion
+  class Solution {
+    public:
+    int longestCommonSubsequence(string text1, string text2) {        
+        return helper(text1,text2,0,0,);
+    }
+    int helper(string &text1,string &text2,int i,int j){
+        if(i>=text1.size()||j>=text2.size()){
+            return 0;
+        }
+        
+        if(text1[i]==text2[j]){
+            return dp[i][j]= 1+helper(text1,text2,i+1,j+1);
+        }else
+        {
+         return dp[i][j]=max(helper(text1,text2,i,j+1),helper(text1,text2,i+1,j));
+        }   
+    }
+  };
+
+  //memoization
+  class Solution {
+    public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int n=text1.size();
+        int m=text2.size();
+        vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
+        return helper(text1,text2,0,0,dp);
+    }
+    int helper(string &text1,string &text2,int i,int j,vector<vector<int>>&dp){
+        if(i>=text1.size()||j>=text2.size()){
+            return dp[i][j]=0;
+        }
+        if(dp[i][j]!=-1)return dp[i][j];
+        if(text1[i]==text2[j]){
+            return dp[i][j]= 1+helper(text1,text2,i+1,j+1,dp);
+        }else
+        {
+         return dp[i][j]=max(helper(text1,text2,i,j+1,dp),helper(text1,text2,i+1,j,dp));
+        }   
+    }
+  };
+
+  //tabulation
+  class Solution {
+    public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int n=text1.size();
+        int m=text2.size();
+        vector<vector<int>>dp(n+1,vector<int>(m+1,-1));
+        return helper(text1,text2,0,0,dp);
+    }
+    int helper(string &text1,string &text2,int I,int J,vector<vector<int>>&dp){
+        int n=text1.size();
+        int m=text2.size();
+        
+        for(int i=n;i>=I;i--)
+            for(int j=m;j>=J;j--){
+              if(i>=text1.size()||j>=text2.size()){
+                 dp[i][j]=0;continue;
+              }
+        
+              if(text1[i]==text2[j]){
+                 dp[i][j]= 1+dp[i+1][j+1];
+              }else
+              {
+              dp[i][j]=max(dp[i][j+1],dp[i+1][j]);
+              }   
+        }
+        return dp[I][J];
+    }
+  };
+
+
 
 //main function===================================================
 int main(){
