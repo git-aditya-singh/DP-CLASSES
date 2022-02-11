@@ -305,7 +305,7 @@ using namespace std;
          return dp[i][j]=max(helper(text1,text2,i,j+1,dp),helper(text1,text2,i+1,j,dp));
         }   
     }
-  };
+  }; 
 
   //tabulation
   class Solution {
@@ -337,7 +337,161 @@ using namespace std;
     }
   };
 
+//leetcode 132 palindromic partitioning II
 
+  //testcase => fafaaaabaaageeg (why not making cut on longest palindrome because it is possible cut on smaller palindrome will give us minimum result).
+  
+  //recursive approach
+  class Solution {
+    public:
+    int minCut(string s) {
+        int n=s.size();
+        vector<vector<bool>>pd(n,vector<bool>(n,false));
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap==0){pd[i][j]=true;}
+                else
+                if(gap==1){
+                    if(s[i]==s[j]){pd[i][j]=true;}
+                }else
+                if(s[i]==s[j]&&pd[i+1][j-1]){pd[i][j]=true;}
+            }
+        } 
+        return helper(pd,s,0,n-1);
+    }
+    int helper(vector<vector<bool>>&pd,string& s,int si,int ei){
+        if(pd[si][ei])return 0;
+        int ans=1e8;
+        for(int cut=si;cut<ei;cut++){
+            if(pd[si][cut]){
+                ans=min(ans,helper(pd,s,cut+1,ei,dp));
+            }
+        }
+        return ans+1;  
+    }
+  };
+
+  //memoization
+  class Solution {
+    public:
+    int minCut(string s) {
+        int n=s.size();
+        vector<vector<bool>>pd(n,vector<bool>(n,false));
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap==0){pd[i][j]=true;}
+                else
+                if(gap==1){
+                    if(s[i]==s[j]){pd[i][j]=true;}
+                }else
+                if(s[i]==s[j]&&pd[i+1][j-1]){pd[i][j]=true;}
+            }
+        } 
+        vector<int>dp(n+1,-1);
+        return helper(pd,s,0,n-1,dp);
+    }
+    int helper(vector<vector<bool>>&pd,string& s,int si,int ei,vector<int>& dp){
+        if(pd[si][ei])return 0;
+        if(dp[si]!=-1)return dp[si];
+        int ans=1e8;
+        for(int cut=si;cut<ei;cut++){
+            if(pd[si][cut]){
+                ans=min(ans,helper(pd,s,cut+1,ei,dp));
+            }
+        }
+        return dp[si]=ans+1;   
+    }
+  };
+
+  //tabulation
+  class Solution {
+    public:
+    int minCut(string s) {
+        int n=s.size();
+        vector<vector<bool>>pd(n,vector<bool>(n,false));
+        for(int gap=0;gap<n;gap++){
+            for(int i=0,j=gap;j<n;i++,j++){
+                if(gap==0){pd[i][j]=true;}
+                else
+                if(gap==1){
+                    if(s[i]==s[j]){pd[i][j]=true;}
+                }else
+                if(s[i]==s[j]&&pd[i+1][j-1]){pd[i][j]=true;}
+            }
+        } 
+        vector<int>dp(n+1,-1);
+        return helper(pd,s,0,n-1,dp);
+    }
+    int helper(vector<vector<bool>>&pd,string& s,int SI,int EI,vector<int>& dp){
+        for(int si=EI,ei=EI;si>=SI;si--){
+        if(pd[si][ei]){dp[si]=0;continue;}
+        int ans=1e8;
+        for(int cut=si;cut<ei;cut++){
+            if(pd[si][cut]){
+                ans=min(ans,dp[cut+1]);
+            }
+        }
+         dp[si]=ans+1;  
+        }
+        return dp[SI];
+    }
+    
+  };
+  /*
+  preprocessing for palindrome reduces the time complexity alott to find out minimum cut in the above problem.
+  */
+
+ 
+//gfg Count subsequences of type a^i, b^j, c^k
+
+     /*      ===========================================Theory==================================================
+     Every time we get new character we have two options.
+     1.it will not join our answer
+     2.it will join our answer
+
+     In condition 1 if it does not join the count of subsequence of that character remains same.
+     In condition 2 if it joins again it have 2 options one to join its preceeding group or join its own group.
+            =>for eg 
+            emptycount         =1
+            Acount(a^i)        =0
+            Bcount(a^i+b^j)    =0
+            Ccount(a^i+b^j+c^k)=0
+        
+        if we get a character C if it does not join our answer will remain same.
+        but if it decide to join either it can join the group of Bcount or in its own group Ccount.
+        
+        same for A also when we get A either it would not join then Acount will remain same 
+        and if it join it have again 2 option
+        either to join emptycount or its own group Acount
+
+        same for B also when we get A either it would not join then Acount will remain same 
+        and if it join it have again 2 option
+        either to join Acount or its own group Bcount    
+     
+        with this observation we have derived the formula used below to calculate Acount,Bcount,Ccount respectively.
+     */
+
+   //tabulation
+   #define ll long long
+   class Solution{
+    public:
+    int fun(string &s) {
+        ll mod= 1e9+7,empcnt=1,acnt=0,bcnt=0,ccnt=0;
+        int n=s.size();
+        for(char& ch:s){
+            if(ch=='a'){
+                acnt=((2*acnt)%mod+empcnt)%mod;
+            }else
+            if(ch=='b'){
+                bcnt=((2*bcnt)%mod+acnt)%mod;
+            }else
+            if(ch=='c'){
+                ccnt=((2*ccnt)%mod+bcnt)%mod;
+            }
+        }
+        return (int)(ccnt%mod);
+    }
+  };
 
 
 //main function============================================================================
