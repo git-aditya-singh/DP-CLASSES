@@ -164,7 +164,7 @@ using namespace std;
          return 0;
      }
      if(s[n-1]==p[m-1]||p[m-1]=='?'){
-        return  dp[n][m]=helper(s,p,n-1,m-1);
+        return  helper(s,p,n-1,m-1);
      }else if(p[m-1]=='*'){
          return helper(s,p,n-1,m) || helper(s,p,n,m-1);
      }else
