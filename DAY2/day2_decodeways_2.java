@@ -1,3 +1,4 @@
+package DAY2;
 import java.io.*;
 import java.util.*;
 
@@ -57,7 +58,7 @@ class Solution {
 
 //tabulation=========================================================================
 
-class Solution {
+class Solution{
     public static int mod=(int)1e9+7;
     public int numDecodings(String s) {
         long[] dp=new long[s.length()+1];

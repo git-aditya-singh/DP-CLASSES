@@ -184,8 +184,32 @@ using namespace std;
     }
   };
 
-  
+//leetcode 300 longest increasing subsequence
 
+  //memoization
+  class Solution {
+    public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        vector<vector<int>>dp(n,vector<int>(n,-1));
+        return helper(-1,0,nums,dp);
+    }
+    int helper(int prev,int idx,vector<int>& nums,vector<vector<int>>& dp){
+        if(idx==nums.size()){
+            return 0;
+        }
+        if( prev !=-1 && dp[prev][idx]!=-1)return dp[prev][idx];
+        int p1=0;
+        if(prev==-1 || nums[idx]>nums[prev]){
+            p1=1+helper(idx,idx+1,nums,dp);
+        }
+        int p2=helper(prev,idx+1,nums,dp);
+        if(prev!=-1){
+            dp[prev][idx]=max(p1,p2);
+        }
+        return max(p1,p2);
+    }
+  };
   
 
 
